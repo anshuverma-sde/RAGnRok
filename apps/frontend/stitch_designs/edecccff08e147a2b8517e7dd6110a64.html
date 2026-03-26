@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RAG-X | Neural Observability &amp; Retrieval Architecture</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@300;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#653c2f",
+              "primary-container": "#da7756",
+              "tertiary": "#006b60",
+              "on-background": "#1e1b14",
+              "outline-variant": "#dbc1b9",
+              "surface-container": "#f5ede1",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#ffdbd0",
+              "on-primary-fixed-variant": "#7b2f13",
+              "tertiary-fixed-dim": "#5ddac8",
+              "error-container": "#ffdad6",
+              "primary-fixed-dim": "#ffb59d",
+              "on-secondary-container": "#794d3e",
+              "surface-dim": "#e1d9cd",
+              "outline": "#88726c",
+              "on-primary-container": "#541500",
+              "secondary": "#805344",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "secondary-fixed": "#ffdbd0",
+              "tertiary-fixed": "#7cf7e4",
+              "surface": "#fff8f1",
+              "surface-container-highest": "#e9e1d5",
+              "inverse-primary": "#ffb59d",
+              "error": "#ba1a1a",
+              "surface-bright": "#fff8f1",
+              "on-tertiary-fixed-variant": "#005048",
+              "on-error": "#ffffff",
+              "on-primary-fixed": "#390b00",
+              "on-secondary-fixed": "#321208",
+              "background": "#fff8f1",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#00312c",
+              "on-tertiary-fixed": "#00201c",
+              "surface-container-high": "#efe7db",
+              "surface-variant": "#e9e1d5",
+              "on-surface": "#1e1b14",
+              "secondary-container": "#fdc1ae",
+              "inverse-surface": "#343028",
+              "inverse-on-surface": "#f8f0e3",
+              "surface-tint": "#994528",
+              "surface-container-low": "#fbf2e6",
+              "on-surface-variant": "#55433d",
+              "secondary-fixed-dim": "#f4b9a6",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#00a494",
+              "primary": "#994528"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fff8f1; }
+        .font-space { font-family: 'Space Grotesk', sans-serif; }
+        .blueprint-grid {
+            background-image: radial-gradient(#dbc1b9 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.15;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Top Navigation Bar -->
+<nav class="bg-[#fff8f1] dark:bg-stone-900 flex justify-between items-center w-full px-8 py-4 max-w-full sticky top-0 z-50">
+<div class="text-2xl font-bold text-[#994528] dark:text-[#da7756] uppercase font-['Space_Grotesk'] tracking-tight">RAG-X</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#994528] dark:text-[#da7756] border-b-2 border-[#994528] pb-1 font-['Space_Grotesk'] font-bold tracking-tight" href="#">Landing</a>
+<a class="text-[#55433d] dark:text-stone-400 font-medium hover:bg-[#f5ede1] dark:hover:bg-stone-800 transition-colors px-2 py-1" href="#">Dashboard</a>
+<a class="text-[#55433d] dark:text-stone-400 font-medium hover:bg-[#f5ede1] dark:hover:bg-stone-800 transition-colors px-2 py-1" href="#">X-Ray</a>
+<a class="text-[#55433d] dark:text-stone-400 font-medium hover:bg-[#f5ede1] dark:hover:bg-stone-800 transition-colors px-2 py-1" href="#">Comparison</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#55433d] dark:text-stone-400 font-medium px-4 py-2 hover:bg-[#f5ede1] transition-colors">System Status</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-bold hover:opacity-90 transition-opacity">Launch App</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative overflow-hidden pt-24 pb-32 px-8">
+<div class="absolute inset-0 blueprint-grid pointer-events-none"></div>
+<div class="max-w-7xl mx-auto grid grid-cols-12 gap-8">
+<div class="col-span-12 md:col-span-8 lg:col-span-7">
+<span class="inline-block bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold font-label uppercase tracking-widest mb-6">Neural Observability V2.0</span>
+<h1 class="font-space text-6xl md:text-8xl font-bold text-on-surface leading-[0.9] tracking-tighter mb-8">
+                    See the <br/><span class="text-primary">AI Think.</span>
+</h1>
+<p class="text-xl text-on-surface-variant max-w-xl mb-10 leading-relaxed">
+                    RAG-X provides unprecedented transparency into retrieval-augmented generation. Architectural precision meets real-time neural mapping for the modern system architect.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 font-bold flex items-center gap-3 hover:opacity-90 transition-opacity">
+                        Explore Infrastructure
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="border-2 border-outline-variant text-on-surface px-8 py-4 font-bold hover:bg-surface-container transition-colors">
+                        Documentation
+                    </button>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 lg:col-span-5 relative mt-12 md:mt-0">
+<div class="bg-surface-container-high aspect-square w-full relative overflow-hidden flex items-center justify-center border-l-4 border-primary">
+<!-- Technical Abstract Visualization -->
+<div class="grid grid-cols-6 grid-rows-6 gap-2 w-4/5 h-4/5">
+<div class="bg-primary col-span-2 row-span-4"></div>
+<div class="bg-secondary-container col-span-4 row-span-1"></div>
+<div class="bg-surface-dim col-span-2 row-span-3"></div>
+<div class="bg-outline-variant col-span-2 row-span-2"></div>
+<div class="bg-primary-fixed-dim col-span-2 row-span-2"></div>
+<div class="bg-on-surface col-span-4 row-span-1"></div>
+</div>
+<div class="absolute bottom-4 left-4 font-space text-[10px] text-on-surface-variant uppercase tracking-[0.2em] font-bold">
+                        Structural_Decomposition_Matrix_v4
+                    </div>
+</div>
+</div>
+</div>
+</header>
+<!-- The Trinity of Retrieval Section -->
+<section class="bg-surface-container-low py-32 px-8">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-12 mb-20">
+<div class="col-span-12 lg:col-start-4 lg:col-span-6">
+<h2 class="font-space text-4xl font-bold text-on-surface mb-4 uppercase tracking-tight">The Trinity of Retrieval</h2>
+<div class="h-1 w-24 bg-primary mb-6"></div>
+<p class="text-on-surface-variant leading-relaxed">
+                        A unified engine processing three distinct dimensions of knowledge representation. We don't just search; we understand the architectural relationship between your data points.
+                    </p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Vector Layer -->
+<div class="group bg-surface p-10 relative overflow-hidden border-t-4 border-primary">
+<div class="text-primary mb-6">
+<span class="material-symbols-outlined text-4xl">distance</span>
+</div>
+<h3 class="font-space text-2xl font-bold mb-4 uppercase">Vector Dimension</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+                        Semantic proximity analysis using multi-dimensional embeddings. Quantize latent space and retrieve context with mathematical certainty.
+                    </p>
+<div class="flex items-center gap-2 font-label text-[10px] font-bold text-primary uppercase tracking-widest">
+<span>Latency: 42ms</span>
+<span class="h-1 w-1 bg-outline-variant rounded-full"></span>
+<span>Recall: 98.4%</span>
+</div>
+</div>
+<!-- Page Index -->
+<div class="group bg-surface-container-highest p-10 relative overflow-hidden">
+<div class="text-on-surface mb-6">
+<span class="material-symbols-outlined text-4xl">auto_stories</span>
+</div>
+<h3 class="font-space text-2xl font-bold mb-4 uppercase">Page Index</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+                        Deterministic document parsing and structural indexing. Maintain the literal integrity of technical archives while enabling granular traversal.
+                    </p>
+<div class="flex items-center gap-2 font-label text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+<span>Depth: 128 Layers</span>
+<span class="h-1 w-1 bg-outline-variant rounded-full"></span>
+<span>Index: Solid State</span>
+</div>
+</div>
+<!-- Graph Layer -->
+<div class="group bg-surface p-10 relative overflow-hidden border-b-4 border-primary">
+<div class="text-primary mb-6">
+<span class="material-symbols-outlined text-4xl">account_tree</span>
+</div>
+<h3 class="font-space text-2xl font-bold mb-4 uppercase">Neural Graph</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-8">
+                        Entity relationship mapping. Discover hidden dependencies between disparate data silos through topological path-finding.
+                    </p>
+<div class="flex items-center gap-2 font-label text-[10px] font-bold text-primary uppercase tracking-widest">
+<span>Nodes: 4.2M</span>
+<span class="h-1 w-1 bg-outline-variant rounded-full"></span>
+<span>Edges: Dynamic</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Neural Observability Showcase -->
+<section class="py-32 px-8 bg-surface">
+<div class="max-w-7xl mx-auto grid grid-cols-12 gap-16 items-center">
+<div class="col-span-12 lg:col-span-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container h-80 flex flex-col justify-end p-6 border-l-2 border-outline-variant">
+<div class="h-1/2 w-full bg-secondary-container mb-2"></div>
+<div class="h-1/4 w-3/4 bg-primary mb-4"></div>
+<div class="font-space text-xs font-bold uppercase tracking-widest">Query Entropy</div>
+</div>
+<div class="bg-surface-dim h-80 flex flex-col justify-start p-6 mt-12 border-r-2 border-primary">
+<div class="font-space text-xs font-bold uppercase tracking-widest mb-4">Context Injection</div>
+<div class="flex gap-1 h-full items-end">
+<div class="bg-primary w-4 h-24"></div>
+<div class="bg-primary w-4 h-32"></div>
+<div class="bg-primary w-4 h-16"></div>
+<div class="bg-on-surface w-4 h-48"></div>
+<div class="bg-primary w-4 h-12"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-6">
+<h2 class="font-space text-5xl font-bold text-on-surface mb-8 tracking-tighter">Neural Observability</h2>
+<p class="text-lg text-on-surface-variant leading-relaxed mb-8">
+                    Stop guessing what happens inside the retrieval black box. RAG-X provides a high-fidelity 'X-Ray' of every query cycle. Monitor token usage, retrieval precision, and generation confidence in a single, architectural viewport.
+                </p>
+<ul class="space-y-6">
+<li class="flex gap-4">
+<div class="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-sm">check</span>
+</div>
+<div>
+<span class="block font-bold uppercase font-label text-sm tracking-wide">Real-time Telemetry</span>
+<span class="text-on-surface-variant text-sm">Sub-millisecond tracking of node traversals and vector lookups.</span>
+</div>
+</li>
+<li class="flex gap-4">
+<div class="h-6 w-6 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-primary text-sm">check</span>
+</div>
+<div>
+<span class="block font-bold uppercase font-label text-sm tracking-wide">Hallucination Detection</span>
+<span class="text-on-surface-variant text-sm">Automated source verification against the underlying knowledge graph.</span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Technical Specs Bento -->
+<section class="bg-surface-container py-32 px-8">
+<div class="max-w-7xl mx-auto">
+<h2 class="font-space text-sm font-bold text-primary uppercase tracking-[0.4em] mb-12 text-center">System Specifications</h2>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+<div class="md:col-span-2 bg-surface p-8 border-t border-outline-variant">
+<span class="material-symbols-outlined text-primary mb-4">memory</span>
+<h4 class="font-space text-xl font-bold mb-2 uppercase">Core Architecture</h4>
+<p class="text-on-surface-variant text-sm">Proprietary RAG engine built on Rust for high-concurrency retrieval workflows and low memory footprint.</p>
+</div>
+<div class="bg-primary p-8 flex flex-col justify-between">
+<h4 class="font-space text-4xl font-bold text-on-primary leading-none tracking-tighter">99.9%</h4>
+<span class="font-label text-[10px] text-primary-fixed font-bold uppercase tracking-widest">Uptime SLA</span>
+</div>
+<div class="bg-secondary-container p-8">
+<h4 class="font-space text-lg font-bold text-on-secondary-container mb-4 uppercase">Integrations</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-lowest px-2 py-1 text-[10px] font-bold uppercase">OpenAI</span>
+<span class="bg-surface-container-lowest px-2 py-1 text-[10px] font-bold uppercase">Anthropic</span>
+<span class="bg-surface-container-lowest px-2 py-1 text-[10px] font-bold uppercase">LlamaIndex</span>
+</div>
+</div>
+<div class="bg-on-surface p-8 md:col-span-2">
+<p class="text-surface-container text-xl font-light italic leading-relaxed">
+                        "The most transparent RAG infrastructure I've ever deployed. It finally bridges the gap between AI and engineering."
+                    </p>
+<div class="mt-6 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary"></div>
+<div>
+<span class="block text-surface text-xs font-bold uppercase">Marcus Thorne</span>
+<span class="block text-surface-container-high text-[10px] uppercase">Principal Architect, Axiom Dynamics</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-2 bg-surface p-8 border-b-2 border-primary">
+<span class="material-symbols-outlined text-primary mb-4">terminal</span>
+<h4 class="font-space text-xl font-bold mb-2 uppercase">CLI &amp; SDK First</h4>
+<p class="text-on-surface-variant text-sm">Full programmatic control over the ingestion pipeline and retrieval logic via our unified API.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final Call to Action -->
+<section class="py-32 px-8 relative overflow-hidden bg-surface">
+<div class="absolute inset-0 blueprint-grid opacity-5 pointer-events-none"></div>
+<div class="max-w-3xl mx-auto text-center relative z-10">
+<h2 class="font-space text-6xl font-bold mb-8 tracking-tighter">Ready to Deploy?</h2>
+<p class="text-xl text-on-surface-variant mb-12">
+                Join the network of architects building the next generation of reliable, observable AI systems.
+            </p>
+<div class="flex flex-col md:flex-row gap-4 justify-center">
+<button class="bg-on-surface text-surface-container-lowest px-12 py-5 font-bold uppercase text-sm tracking-widest hover:opacity-90">Start Free Project</button>
+<button class="bg-surface-container-high text-on-surface px-12 py-5 font-bold uppercase text-sm tracking-widest hover:bg-surface-dim">Request Demo</button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-highest py-16 px-8 border-t border-outline-variant">
+<div class="max-w-7xl mx-auto grid grid-cols-12 gap-12">
+<div class="col-span-12 md:col-span-4">
+<div class="text-2xl font-bold text-primary font-space tracking-tight mb-6">RAG-X</div>
+<p class="text-sm text-on-surface-variant max-w-xs">
+                    The observability layer for retrieval-augmented generation. Architected for precision. Built for scale.
+                </p>
+</div>
+<div class="col-span-6 md:col-span-2">
+<h5 class="font-space text-xs font-bold uppercase tracking-widest mb-6">Product</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Infrastructure</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Neural Mapping</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+</ul>
+</div>
+<div class="col-span-6 md:col-span-2">
+<h5 class="font-space text-xs font-bold uppercase tracking-widest mb-6">Resources</h5>
+<ul class="space-y-4 text-sm text-on-surface-variant">
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Reference</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">System Status</a></li>
+</ul>
+</div>
+<div class="col-span-12 md:col-span-4 md:text-right">
+<h5 class="font-space text-xs font-bold uppercase tracking-widest mb-6">Newsletter</h5>
+<div class="flex gap-2 justify-end">
+<input class="bg-surface px-4 py-2 border-none focus:ring-1 focus:ring-primary text-sm w-full md:w-auto" placeholder="Email Address" type="email"/>
+<button class="bg-primary text-on-primary px-4 py-2 font-bold uppercase text-[10px] tracking-widest">Join</button>
+</div>
+<div class="mt-8 flex gap-4 justify-end">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">share</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">public</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">code</span>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between gap-4">
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">© 2024 RAG-X INTERNAL. ALL RIGHTS RESERVED.</span>
+<div class="flex gap-8">
+<a class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
+<a class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</body></html>
