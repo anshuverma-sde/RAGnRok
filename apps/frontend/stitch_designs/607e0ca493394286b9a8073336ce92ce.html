@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RAG-X | Architecture Comparison</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#653c2f",
+                        "primary-container": "#da7756",
+                        "tertiary": "#006b60",
+                        "on-background": "#1e1b14",
+                        "outline-variant": "#dbc1b9",
+                        "surface-container": "#f5ede1",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#ffdbd0",
+                        "on-primary-fixed-variant": "#7b2f13",
+                        "tertiary-fixed-dim": "#5ddac8",
+                        "error-container": "#ffdad6",
+                        "primary-fixed-dim": "#ffb59d",
+                        "on-secondary-container": "#794d3e",
+                        "surface-dim": "#e1d9cd",
+                        "outline": "#88726c",
+                        "on-primary-container": "#541500",
+                        "secondary": "#805344",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed": "#ffdbd0",
+                        "tertiary-fixed": "#7cf7e4",
+                        "surface": "#fff8f1",
+                        "surface-container-highest": "#e9e1d5",
+                        "inverse-primary": "#ffb59d",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fff8f1",
+                        "on-tertiary-fixed-variant": "#005048",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#390b00",
+                        "on-secondary-fixed": "#321208",
+                        "background": "#fff8f1",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#00312c",
+                        "on-tertiary-fixed": "#00201c",
+                        "surface-container-high": "#efe7db",
+                        "surface-variant": "#e9e1d5",
+                        "on-surface": "#1e1b14",
+                        "secondary-container": "#fdc1ae",
+                        "inverse-surface": "#343028",
+                        "inverse-on-surface": "#f8f0e3",
+                        "surface-tint": "#994528",
+                        "surface-container-low": "#fbf2e6",
+                        "on-surface-variant": "#55433d",
+                        "secondary-fixed-dim": "#f4b9a6",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#00a494",
+                        "primary": "#994528"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fff8f1;
+            background-image: radial-gradient(#dbc1b9 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            background-attachment: fixed;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="font-body text-on-surface">
+<!-- TopNavBar: Execution of Shared Components JSON -->
+<nav class="flex justify-between items-center w-full px-8 py-4 max-w-full bg-[#fff8f1] dark:bg-stone-900 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold text-[#994528] dark:text-[#da7756] uppercase font-headline tracking-tight">RAG-X</span>
+<div class="hidden md:flex gap-6">
+<a class="text-[#55433d] dark:text-stone-400 font-medium hover:bg-[#f5ede1] dark:hover:bg-stone-800 transition-colors px-2 py-1" href="#">Landing</a>
+<a class="text-[#55433d] dark:text-stone-400 font-medium hover:bg-[#f5ede1] dark:hover:bg-stone-800 transition-colors px-2 py-1" href="#">Dashboard</a>
+<a class="text-[#55433d] dark:text-stone-400 font-medium hover:bg-[#f5ede1] dark:hover:bg-stone-800 transition-colors px-2 py-1" href="#">X-Ray</a>
+<a class="text-[#994528] dark:text-[#da7756] border-b-2 border-[#994528] pb-1 font-bold" href="#">Comparison</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 text-sm font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container transition-colors">System Status</button>
+<button class="bg-primary text-on-primary px-6 py-2 text-sm font-bold uppercase tracking-widest rounded-sm hover:opacity-90 transition-all">Launch App</button>
+</div>
+</nav>
+<main class="max-w-[1440px] mx-auto px-8 py-12">
+<!-- Hero Section -->
+<header class="mb-16 border-l-4 border-primary pl-8">
+<h1 class="font-headline text-5xl font-bold tracking-tighter text-on-surface uppercase mb-2">Architectural Battleground</h1>
+<p class="text-on-surface-variant max-w-2xl text-lg leading-relaxed">
+                Comparative analysis of three core retrieval engines. Measured against enterprise-grade benchmarks for high-frequency neural search.
+            </p>
+</header>
+<!-- 3-Way Architecture Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-0 border border-outline-variant/20">
+<!-- Column 1: Vector Search -->
+<section class="bg-surface-container-low p-8 border-r border-outline-variant/20 flex flex-col">
+<div class="mb-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<h2 class="font-headline text-2xl font-bold uppercase tracking-tight">Vector Ops</h2>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 font-medium">Standard semantic similarity using HNSW indexing and cosine distance metrics.</p>
+</div>
+<!-- Metrics -->
+<div class="space-y-8 mb-12 flex-grow">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Latency</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">12ms</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[15%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Token Cost</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">Low</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[30%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Precision</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">84%</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[84%]"></div>
+</div>
+</div>
+</div>
+<!-- Synthesis Output -->
+<div class="bg-surface-container-lowest p-6 border-l-2 border-primary">
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest block mb-4">Synthesis Output</span>
+<blockquote class="italic text-on-surface leading-relaxed text-sm">
+                        "High throughput with significant semantic overlap, yet struggles with precise keyword matching in technical manuals."
+                    </blockquote>
+</div>
+</section>
+<!-- Column 2: Page Architecture -->
+<section class="bg-surface-container p-8 border-r border-outline-variant/20 flex flex-col">
+<div class="mb-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">article</span>
+<h2 class="font-headline text-2xl font-bold uppercase tracking-tight">Page Flow</h2>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 font-medium">Document-level context windows utilizing sliding-scale chunking and metadata filtering.</p>
+</div>
+<!-- Metrics -->
+<div class="space-y-8 mb-12 flex-grow">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Latency</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">48ms</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[45%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Token Cost</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">Medium</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[60%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Precision</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">91%</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[91%]"></div>
+</div>
+</div>
+</div>
+<!-- Synthesis Output -->
+<div class="bg-surface-container-lowest p-6 border-l-2 border-primary">
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest block mb-4">Synthesis Output</span>
+<blockquote class="italic text-on-surface leading-relaxed text-sm">
+                        "Superior context retention. Ideal for long-form synthesis where document structure dictates relevant meaning."
+                    </blockquote>
+</div>
+</section>
+<!-- Column 3: Graph RAG -->
+<section class="bg-surface-container-high p-8 flex flex-col">
+<div class="mb-10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary text-3xl">account_tree</span>
+<h2 class="font-headline text-2xl font-bold uppercase tracking-tight">Graph X-Ray</h2>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 font-medium">Entity-relationship mapping with multi-hop reasoning and knowledge graph traversal.</p>
+</div>
+<!-- Metrics -->
+<div class="space-y-8 mb-12 flex-grow">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Latency</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">124ms</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[85%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Token Cost</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">High</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[95%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest">Precision</span>
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest">98%</span>
+</div>
+<div class="h-1 bg-surface-container-highest w-full">
+<div class="h-1 bg-primary w-[98%]"></div>
+</div>
+</div>
+</div>
+<!-- Synthesis Output -->
+<div class="bg-surface-container-lowest p-6 border-l-2 border-primary">
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-widest block mb-4">Synthesis Output</span>
+<blockquote class="italic text-on-surface leading-relaxed text-sm">
+                        "Absolute precision for complex queries. Eliminates hallucinations by grounding results in explicit entity links."
+                    </blockquote>
+</div>
+</section>
+</div>
+<!-- System Visualization (Extra Architectural Element) -->
+<div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container p-8 flex flex-col justify-center items-center text-center">
+<span class="font-label text-[10px] font-black uppercase text-primary tracking-[0.3em] mb-4">Neural Infrastructure</span>
+<img class="w-full h-64 object-cover grayscale opacity-80 hover:grayscale-0 transition-all duration-700" data-alt="abstract technical schematic of a neural network grid with architectural lines and geometric nodes in warm orange and brown tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk-vUrJLuKmZe4vN5ZOVUbcDR5AcqrfrvdNg4KgUenp9TyEBKyTlwQSedq_Kier0sjNwfZ5dR1ywNd_-Q8ToDTCW8nCcHuFIoXxuWqhJN2TSwnhrcvfZC1Ta3SMf1KQqd1LRC5RXSpfNzPbR5xZX3i418XTts-8KiNHWWXq2y4mEm6AD4DVsK2TPhJbzr5Vfa0NTM1vkBdB-PSeoyLRBc4B6rov0eLDTCJzmU-N6W_yBuDwvYxHwe9JQriGUXNpNcpZMlcAcLJlqDU"/>
+</div>
+<div class="bg-surface-dim p-8 flex flex-col justify-center">
+<h3 class="font-headline text-3xl font-bold uppercase mb-4">Comparative Edge</h3>
+<p class="text-on-surface-variant text-sm leading-loose mb-6">
+                    While Vector Ops provides the speed required for consumer-facing chat, the Graph X-Ray architecture remains the gold standard for financial and legal auditing. RAG-X allows for dynamic switching between these layers based on query complexity.
+                </p>
+<div class="flex gap-4">
+<div class="bg-primary text-on-primary px-4 py-3 font-label text-[10px] font-black uppercase tracking-widest">Download Report</div>
+<div class="bg-surface-container-highest text-on-surface px-4 py-3 font-label text-[10px] font-black uppercase tracking-widest">View API Docs</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer: Metadata Logs -->
+<footer class="mt-20 bg-surface-dim p-8 border-t border-outline-variant/30">
+<div class="max-w-[1440px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="space-y-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest block">Timestamp</span>
+<span class="text-xs font-mono text-on-surface">2023-10-27T14:42:01.442Z</span>
+</div>
+<div class="space-y-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest block">Model Hash</span>
+<span class="text-xs font-mono text-on-surface uppercase">sha256:7f9b8c2e1...</span>
+</div>
+<div class="space-y-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest block">Environment</span>
+<span class="text-xs font-mono text-on-surface">PROD_CLUSTER_ALPHA</span>
+</div>
+<div class="space-y-2">
+<span class="font-label text-[10px] font-black uppercase text-on-surface-variant tracking-widest block">Status</span>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs font-mono text-on-surface">ALL SYSTEMS NOMINAL</span>
+</div>
+</div>
+</div>
+<div class="max-w-[1440px] mx-auto mt-12 pt-8 border-t border-outline-variant/10 flex justify-between items-center">
+<span class="font-headline font-bold text-primary uppercase text-sm">RAG-X Internal</span>
+<span class="font-label text-[10px] text-on-surface-variant">V2.0.4-STABLE RELEASE</span>
+</div>
+</footer>
+<!-- BottomNavBar: Execution of Shared Components JSON (Suppressed for Desktop, visible on Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 bg-[#fff8f1] dark:bg-stone-900 border-t border-[#dbc1b9]/30 z-50">
+<div class="flex flex-col items-center justify-center text-[#55433d] dark:text-stone-400 opacity-60">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label text-[10px] uppercase font-bold">Overview</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#55433d] dark:text-stone-400 opacity-60">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label text-[10px] uppercase font-bold">X-Ray</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#55433d] dark:text-stone-400 opacity-60">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-label text-[10px] uppercase font-bold">Logs</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#fdc1ae] dark:bg-[#994528]/20 text-[#7b2f13] rounded-full px-4 py-1">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-label text-[10px] uppercase font-bold">System</span>
+</div>
+</nav>
+</body></html>

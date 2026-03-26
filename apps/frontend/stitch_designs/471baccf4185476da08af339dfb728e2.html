@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RAG-X | Neural Indexing Hub</title>
+<!-- Google Fonts: Space Grotesk & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Space_Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed-variant": "#653c2f",
+              "primary-container": "#da7756",
+              "tertiary": "#006b60",
+              "on-background": "#1e1b14",
+              "outline-variant": "#dbc1b9",
+              "surface-container": "#f5ede1",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#ffdbd0",
+              "on-primary-fixed-variant": "#7b2f13",
+              "tertiary-fixed-dim": "#5ddac8",
+              "error-container": "#ffdad6",
+              "primary-fixed-dim": "#ffb59d",
+              "on-secondary-container": "#794d3e",
+              "surface-dim": "#e1d9cd",
+              "outline": "#88726c",
+              "on-primary-container": "#541500",
+              "secondary": "#805344",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              "secondary-fixed": "#ffdbd0",
+              "tertiary-fixed": "#7cf7e4",
+              "surface": "#fff8f1",
+              "surface-container-highest": "#e9e1d5",
+              "inverse-primary": "#ffb59d",
+              "error": "#ba1a1a",
+              "surface-bright": "#fff8f1",
+              "on-tertiary-fixed-variant": "#005048",
+              "on-error": "#ffffff",
+              "on-primary-fixed": "#390b00",
+              "on-secondary-fixed": "#321208",
+              "background": "#fff8f1",
+              "on-secondary": "#ffffff",
+              "on-tertiary-container": "#00312c",
+              "on-tertiary-fixed": "#00201c",
+              "surface-container-high": "#efe7db",
+              "surface-variant": "#e9e1d5",
+              "on-surface": "#1e1b14",
+              "secondary-container": "#fdc1ae",
+              "inverse-surface": "#343028",
+              "inverse-on-surface": "#f8f0e3",
+              "surface-tint": "#994528",
+              "surface-container-low": "#fbf2e6",
+              "on-surface-variant": "#55433d",
+              "secondary-fixed-dim": "#f4b9a6",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#00a494",
+              "primary": "#994528"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #fff8f1;
+            font-family: 'Inter', sans-serif;
+            color: #1e1b14;
+        }
+        /* Blueprint grid background */
+        .blueprint-bg {
+            background-image: radial-gradient(#dbc1b9 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            opacity: 0.15;
+        }
+    </style>
+</head>
+<body class="overflow-hidden h-screen flex">
+<!-- SIDE NAV BAR (The Anchor) -->
+<aside class="h-screen w-64 bg-[#e1d9cd] flex flex-col py-6 border-r border-[#dbc1b9]/20 z-20 shrink-0">
+<!-- Brand Header -->
+<div class="px-6 mb-10">
+<h1 class="text-lg font-black text-[#994528] font-headline uppercase tracking-tighter">RAG-X Internal</h1>
+<p class="text-[10px] font-medium text-[#55433d]/60 font-label tracking-widest uppercase mt-1">V2.0.4-Stable</p>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#fff8f1] text-[#994528] font-bold border-l-4 border-[#994528] transition-all translate-x-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label text-sm tracking-wide">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#55433d] hover:bg-[#f5ede1] transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label text-sm tracking-wide">Logs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#55433d] hover:bg-[#f5ede1] transition-all" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label text-sm tracking-wide">Telemetry</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#55433d] hover:bg-[#f5ede1] transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label text-sm tracking-wide">System</span>
+</a>
+</nav>
+<!-- CTA & User -->
+<div class="px-4 mt-auto">
+<button class="w-full bg-[#994528] text-white font-headline text-sm font-bold py-3 px-4 flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+                Deploy Patch
+            </button>
+<div class="mt-6 flex items-center gap-3 p-2 bg-[#f5ede1]/50">
+<div class="w-8 h-8 bg-[#994528] flex items-center justify-center text-white font-bold text-xs uppercase">SO</div>
+<div>
+<p class="text-xs font-bold text-[#55433d]">System Operator</p>
+<p class="text-[10px] text-[#55433d]/60">Status: Active</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN CANVAS -->
+<main class="flex-1 relative overflow-hidden flex flex-col bg-surface">
+<!-- Subtle Blueprint Overlay -->
+<div class="absolute inset-0 blueprint-bg pointer-events-none"></div>
+<!-- TOP BAR -->
+<header class="flex justify-between items-center w-full px-8 py-4 bg-[#fff8f1] z-10">
+<div>
+<h2 class="font-headline font-bold text-2xl text-[#994528] tracking-tight">DASHBOARD</h2>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-high">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant">Cluster: Alpha-9</span>
+</div>
+<button class="text-[#55433d] font-medium hover:bg-[#f5ede1] transition-colors px-3 py-2 text-sm">System Status</button>
+<button class="bg-[#994528] text-white px-4 py-2 font-headline font-bold text-sm hover:opacity-80 transition-opacity">Launch App</button>
+</div>
+</header>
+<!-- DASHBOARD CONTENT -->
+<div class="flex-1 flex p-8 gap-8 overflow-hidden relative z-10">
+<!-- LEFT CONTENT: Indexing Hub & Data -->
+<div class="flex-1 flex flex-col gap-8 overflow-y-auto pr-4 custom-scrollbar">
+<!-- Hero Section: Neural Indexing Hub -->
+<section class="bg-surface-container p-8 border-l-8 border-[#994528]">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-headline font-bold text-3xl text-on-surface tracking-tighter mb-1 uppercase">Neural Indexing Hub</h3>
+<p class="text-on-surface-variant font-body text-sm max-w-xl">Active ingestion pipeline processing legacy PDF dossiers and architectural schemas. Global latency currently within nominal thresholds.</p>
+</div>
+<div class="bg-surface-container-lowest p-4 flex flex-col items-center">
+<span class="text-[10px] font-bold font-label uppercase text-[#994528] mb-1">Index Health</span>
+<span class="text-2xl font-headline font-bold">99.2%</span>
+</div>
+</div>
+<!-- Technical Metrics Grid -->
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface-container-highest p-4">
+<label class="text-[10px] font-bold font-label uppercase text-on-surface-variant mb-2 block">VRAM Utilization</label>
+<div class="w-full h-4 bg-surface flex items-center p-0.5">
+<div class="h-full bg-[#994528]" style="width: 74%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-[10px] font-medium text-on-surface-variant">74% Capacity</span>
+<span class="text-[10px] font-medium text-on-surface-variant">32GB / 48GB</span>
+</div>
+</div>
+<div class="bg-surface-container-highest p-4">
+<label class="text-[10px] font-bold font-label uppercase text-on-surface-variant mb-2 block">System Latency</label>
+<div class="w-full h-4 bg-surface flex items-center p-0.5">
+<div class="h-full bg-[#da7756]" style="width: 28%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-[10px] font-medium text-on-surface-variant">12ms Response</span>
+<span class="text-[10px] font-medium text-on-surface-variant">Threshold: 50ms</span>
+</div>
+</div>
+<div class="bg-surface-container-highest p-4">
+<label class="text-[10px] font-bold font-label uppercase text-on-surface-variant mb-2 block">Queue Load</label>
+<div class="w-full h-4 bg-surface flex items-center p-0.5">
+<div class="h-full bg-on-surface-variant" style="width: 45%"></div>
+</div>
+<div class="flex justify-between mt-1">
+<span class="text-[10px] font-medium text-on-surface-variant">1,204 Tasks</span>
+<span class="text-[10px] font-medium text-on-surface-variant">Optimal</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Ledger List -->
+<section class="flex flex-col">
+<div class="flex justify-between items-end mb-4 px-2">
+<h4 class="font-headline font-bold text-lg text-on-surface uppercase tracking-tight">Recent Ingestion Ledger</h4>
+<span class="text-[10px] font-bold font-label uppercase text-on-surface-variant underline cursor-pointer">Export CSV</span>
+</div>
+<div class="bg-surface-container-lowest">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-highest text-[10px] font-bold font-label uppercase text-on-surface-variant">
+<th class="px-4 py-3">Timestamp</th>
+<th class="px-4 py-3">Source Identifier</th>
+<th class="px-4 py-3">Vector Nodes</th>
+<th class="px-4 py-3 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="text-sm font-body">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-4 text-[#55433d] font-mono">14:22:09.11</td>
+<td class="px-4 py-4 font-bold">STRUCT_DOC_v3.pdf</td>
+<td class="px-4 py-4 text-on-surface-variant">12,402</td>
+<td class="px-4 py-4 text-right">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-black uppercase">Indexed</span>
+</td>
+</tr>
+<tr class="bg-surface-container/30 hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-4 text-[#55433d] font-mono">14:18:45.92</td>
+<td class="px-4 py-4 font-bold">SCHEMATIC_ARC_09.png</td>
+<td class="px-4 py-4 text-on-surface-variant">8,110</td>
+<td class="px-4 py-4 text-right">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-black uppercase">Indexed</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-4 text-[#55433d] font-mono">14:12:11.04</td>
+<td class="px-4 py-4 font-bold">LEGACY_ARCHIVE_FINAL</td>
+<td class="px-4 py-4 text-on-surface-variant">54,001</td>
+<td class="px-4 py-4 text-right">
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-[10px] font-black uppercase">Parsing</span>
+</td>
+</tr>
+<tr class="bg-surface-container/30 hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-4 text-[#55433d] font-mono">13:55:02.33</td>
+<td class="px-4 py-4 font-bold">USER_SUBMISSION_X.doc</td>
+<td class="px-4 py-4 text-on-surface-variant">1,299</td>
+<td class="px-4 py-4 text-right">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-black uppercase">Indexed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Status Indicators Block (Bento style) -->
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-[#f5ede1] p-6 flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-[#994528]">memory</span>
+<span class="text-[10px] font-bold font-label uppercase text-[#994528]">Stable</span>
+</div>
+<div>
+<p class="text-[10px] font-bold font-label uppercase text-on-surface-variant">Compute Cluster</p>
+<h5 class="text-xl font-headline font-bold">NEURAL_GRID_01</h5>
+</div>
+</div>
+<div class="bg-[#e9e1d5] p-6 flex flex-col justify-between h-40">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-tertiary">database</span>
+<span class="text-[10px] font-bold font-label uppercase text-tertiary">Sync: OK</span>
+</div>
+<div>
+<p class="text-[10px] font-bold font-label uppercase text-on-surface-variant">Active Vectors</p>
+<h5 class="text-xl font-headline font-bold">4.2M Nodes</h5>
+</div>
+</div>
+</section>
+</div>
+<!-- RIGHT CONTENT: Integrated Chat Panel -->
+<div class="w-[420px] flex flex-col bg-surface-container-lowest border border-[#dbc1b9]/20 shadow-sm relative z-20">
+<!-- Chat Header -->
+<div class="p-6 bg-[#fff8f1] border-b border-[#dbc1b9]/20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-[#994528]"></div>
+<h4 class="font-headline font-bold text-sm uppercase tracking-wider">NEURAL_QUERY_OS</h4>
+</div>
+<button class="bg-surface-container-high p-2 hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-sm">more_vert</span>
+</button>
+</div>
+<!-- Chat Messages Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col custom-scrollbar">
+<!-- Bot Message -->
+<div class="flex flex-col items-start gap-2 max-w-[85%]">
+<div class="bg-[#f5ede1] p-4 text-xs font-body text-on-surface-variant border-l-2 border-[#994528]">
+                            Connection established. Live inference active on 4 indexed documents. How can I assist with your data synthesis?
+                        </div>
+<span class="text-[8px] font-bold font-label uppercase opacity-40 ml-1">System • 14:22</span>
+</div>
+<!-- User Message -->
+<div class="flex flex-col items-end gap-2 max-w-[85%] self-end">
+<div class="bg-[#994528] p-4 text-xs font-body text-white">
+                            What are the structural stress tolerances mentioned in SCHEMATIC_ARC_09?
+                        </div>
+<span class="text-[8px] font-bold font-label uppercase opacity-40 mr-1">Operator • 14:24</span>
+</div>
+<!-- Bot Message -->
+<div class="flex flex-col items-start gap-2 max-w-[95%]">
+<div class="bg-[#f5ede1] p-4 text-xs font-body text-on-surface-variant border-l-2 border-[#994528] leading-relaxed">
+<p class="mb-2 font-bold uppercase text-[10px]">Reference: SCHEMATIC_ARC_09 (Page 14)</p>
+                            According to the indexed vector data, the structural stress tolerances for the primary load-bearing members are rated at <span class="text-[#994528] font-bold">45,000 PSI</span>. This assumes a reinforced concrete substrate with 2% basalt fiber integration as specified in the concurrent PDF dossiers.
+                        </div>
+<span class="text-[8px] font-bold font-label uppercase opacity-40 ml-1">System • 14:24</span>
+</div>
+</div>
+<!-- Chat Input Area -->
+<div class="p-6 bg-[#fff8f1] border-t border-[#dbc1b9]/20">
+<div class="flex gap-2 mb-4">
+<button class="flex-1 flex items-center justify-center gap-2 bg-surface-container text-[10px] font-bold font-label uppercase py-2 hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-xs">upload_file</span>
+                            Document Upload
+                        </button>
+<button class="px-4 flex items-center justify-center bg-surface-container text-on-surface-variant hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-xs">history</span>
+</button>
+</div>
+<div class="relative">
+<textarea class="w-full bg-surface-container-highest border-none focus:ring-0 text-sm font-body p-4 placeholder-on-surface-variant/40 resize-none" placeholder="Query the neural index..." rows="3"></textarea>
+<div class="absolute bottom-4 right-4 flex gap-2">
+<button class="bg-[#994528] text-white w-8 h-8 flex items-center justify-center hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm">send</span>
+</button>
+</div>
+</div>
+<div class="mt-3 flex items-center justify-between">
+<p class="text-[9px] font-medium text-on-surface-variant/60 font-label">Tokens Remaining: 144,209</p>
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<div class="w-2 h-2 rounded-full bg-surface-container-highest"></div>
+<div class="w-2 h-2 rounded-full bg-surface-container-highest"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Blueprint Corner Label -->
+<div class="absolute bottom-4 left-8 text-[10px] font-bold font-label text-[#994528]/20 uppercase pointer-events-none tracking-widest">
+            Structural Integrity Analysis Phase 4 // ARCH-PRO_772
+        </div>
+</main>
+<!-- MOBILE NAVIGATION (Hidden on MD) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 bg-[#fff8f1] border-t border-[#dbc1b9]/30 z-50">
+<a class="flex flex-col items-center justify-center bg-[#fdc1ae] text-[#7b2f13] rounded-full px-4 py-1 scale-95 duration-100" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label text-[10px] uppercase font-bold">Overview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#55433d] opacity-60 hover:opacity-100" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label text-[10px] uppercase font-bold">X-Ray</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#55433d] opacity-60 hover:opacity-100" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-label text-[10px] uppercase font-bold">Logs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#55433d] opacity-60 hover:opacity-100" href="#">
+<span class="material-symbols-outlined">settings_input_component</span>
+<span class="font-label text-[10px] uppercase font-bold">System</span>
+</a>
+</nav>
+</body></html>
