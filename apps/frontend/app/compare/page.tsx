@@ -1,8 +1,5 @@
-import { ComparePage } from "@/features/compare/components/ComparePage";
-import type { Metadata } from "next";
+import { CompareGrid } from "@/features/compare/components/CompareGrid";
 
-export const metadata: Metadata = { title: "Compare" };
-
-export default function CompareRoute() {
-  return <ComparePage />;
+export default function Compare() {
+  return <CompareGrid />;
 }

@@ -4,6 +4,7 @@ export * from "./primitives/badge";
 export * from "./primitives/card";
 export * from "./primitives/glass-panel";
 export * from "./primitives/skeleton";
+export * from "./primitives/typography";
 
 export * from "./primitives/input";
 export * from "./primitives/dialog";
