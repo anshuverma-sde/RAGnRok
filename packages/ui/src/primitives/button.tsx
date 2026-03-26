@@ -6,40 +6,23 @@ import { Slot } from "@radix-ui/react-slot";
 
 export const button = tv({
   base: [
-    "inline-flex items-center justify-center gap-2 font-medium",
-    "transition-all duration-200 ease-out",
+    "inline-flex items-center justify-center gap-2 font-label uppercase tracking-widest text-[10px] rounded-sm",
+    "transition-all duration-200 ease-out border-none",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
     "disabled:pointer-events-none disabled:opacity-40",
     "cursor-pointer select-none whitespace-nowrap",
   ],
   variants: {
     intent: {
-      primary: [
-        "bg-gradient-primary border-none",
-        "text-on-primary font-semibold",
-        "hover:shadow-glow-lg hover:scale-[1.02]",
-        "active:scale-[0.98]",
-      ],
-      secondary: [
-        "bg-container-high border-none text-on-surface",
-        "hover:bg-container-highest hover:scale-[1.02] hover:shadow-glow",
-        "active:scale-[0.98]",
-      ],
-      ghost: [
-        "bg-transparent border-none text-primary",
-        "hover:bg-container-low hover:scale-[1.02]",
-        "active:scale-[0.98]",
-      ],
-      danger: [
-        "bg-error border-none text-on-error",
-        "hover:bg-error/80 hover:scale-[1.02]",
-        "active:scale-[0.98]",
-      ],
+      primary: "bg-primary text-on-primary font-bold hover:opacity-90 shadow-sm",
+      secondary: "bg-surface-container-highest text-on-surface font-bold hover:bg-surface-container shadow-sm",
+      ghost: "bg-transparent text-primary font-bold hover:bg-surface-container",
+      danger: "bg-error text-on-error hover:opacity-90 font-bold",
     },
     size: {
-      sm: "h-8 px-3 text-xs rounded",
-      md: "h-10 px-4 text-sm rounded",
-      lg: "h-12 px-6 text-base rounded",
+      sm: "h-8 px-3",
+      md: "h-10 px-4",
+      lg: "h-12 px-6",
     },
     loading: {
       true: "pointer-events-none",

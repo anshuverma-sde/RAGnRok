@@ -8,14 +8,16 @@ export const card = tv({
   variants: {
     level: {
       0: "bg-surface",
-      1: "bg-container-low rounded-xl",
-      2: "bg-container rounded-lg",
-      3: "bg-container-high rounded-md",
-      4: "bg-container-highest rounded",
+      1: "bg-surface-container-lowest rounded-sm shadow-sm",
+      2: "bg-surface-container rounded-sm shadow-sm",
+      3: "bg-surface-container-high rounded-sm shadow-sm",
+      4: "bg-surface-container-highest rounded-sm shadow-inner border border-outline-variant/10",
     },
     border: {
       none: "border-none",
-      ghost: "border border-outline-variant/15",
+      ghost: "border border-outline-variant/20",
+      primary: "border-l-4 border-l-primary",
+      tertiary: "border-l-4 border-l-tertiary",
     },
     padding: {
       none: "p-0",
@@ -26,7 +28,7 @@ export const card = tv({
   },
   defaultVariants: {
     level: 2,
-    border: "none",
+    border: "ghost",
     padding: "md",
   }
 });
@@ -66,7 +68,7 @@ export const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={`font-display text-lg font-semibold text-on-surface tracking-tight ${className ?? ""}`}
+    className={`font-headline text-2xl font-bold tracking-tight text-on-surface ${className ?? ""}`}
     {...props}
   />
 ));
